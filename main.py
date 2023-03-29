@@ -1,36 +1,51 @@
+# Tre liste vuote per salvare tutti i dati presi in input dal programma.
+
 nomi = []
 ruoli = []
 forze = []
+
+# done è una condizione per uscire dal ciclo infinito per gli input
 
 done = False
 
 squadra = input("Nome della squadra: ")
 
-while not done:
-    nome = input("Giocatore: ")
-    if nome != "fine":
-        nomi.append(nome)
+# Ciclo infinito per ricevere in input i giocatori, ruoli e forze
 
-        ruolo = input("Inserisci il ruolo (p - d - a - c): ").lower()
+while True:
+  nome = input("\nGiocatore: ")
+  if nome.upper() == "FINE":
 
-        while ruolo not in ["p", "d", "a", "c"]:
-            ruolo = input("Inserisci il ruolo (p - d - a - c): ").lower()
+    # Controllo se ci sono almeno 1 giocatore in ogni ruolo.
 
-        ruoli.append(ruolo)
-
-        forza = int(input("Inserisci la forza: "))
-
-        while forza < 10 or forza > 99:
-            forza = int(input("Inserisci la forza: "))
-
-        forze.append(forza)
+    if 'p' in ruoli and 'd' in ruoli and 'c' in ruoli and 'a' in ruoli:
+      break
 
     else:
-        done = True
+      print("\n⚠ Comando 'fine' non consentito: prima di terminare l'immissione dei giocatori, assicurati che in ognuno dei 4 ruoli (portiere, difesa, centrocampo, attacco) sia presente almeno 1 giocatore.");
+      continue
 
-# calculate the average strength for each role
+  nomi.append(nome)
+
+  while True:
+    ruolo = input("Inserisci il ruolo (p - d - a - c): ")
+
+    if ruolo in ['p','d','c','a']:
+      ruoli.append(ruolo)
+      break
+
+  while True:
+    forza = int(input("Inserisci la forza (10-99): "))
+
+    if 10 <= forza <= 99:
+      forze.append(forza)
+      break
+
+# Calcola la media delle forze di ogni giocatore
+
 media_p = media_d = media_a = media_c = 0
 count_p = count_d = count_a = count_c = 0
+
 for ruolo, forza in zip(ruoli, forze):
     if ruolo == "p":
         media_p += forza
@@ -50,9 +65,11 @@ media_d = media_d / count_d if count_d != 0 else 0
 media_a = media_a / count_a if count_a != 0 else 0
 media_c = media_c / count_c if count_c != 0 else 0
 
-# calculate the minimum and maximum strength for each role
+# Calcola il valore max, min per ogni ruolo
+
 min_p = min_d = min_a = min_c = 0
 max_p = max_d = max_a = max_c = 0
+
 for ruolo, forza in zip(ruoli, forze):
     if ruolo == "p":
         if forza < min_p or min_p == 0:
@@ -75,13 +92,15 @@ for ruolo, forza in zip(ruoli, forze):
         if forza > max_c:
             max_c = forza
 
-#output menu 1
+# Output dei giocatori inseriti in nomi, i suoi ruoli e le forze.
 print("\nSquadra: ", squadra)
+
 print("NOME     RUOLO     FORZA")
 for n, r, f in zip(nomi, ruoli, forze):
     print("{:<8} {:<8} {:<5}".format(n, r.upper(), f))
 
-#output menu 2
+# Statistiche finali di ogni ruolo
+
 print("\nRUOLO     MEDIA     MIN     MAX     TOT")
 print("{:<8}  {:<8.2f}  {:<5}   {:<5}   {:<5}".format("P", media_p, min_p, max_p, count_p))
 print("{:<8}  {:<8.2f}  {:<5}   {:<5}   {:<5}".format("D", media_d, min_d, max_d, count_d))
@@ -89,22 +108,25 @@ print("{:<8}  {:<8.2f}  {:<5}   {:<5}   {:<5}".format("A", media_a, min_a, max_a
 print("{:<8}  {:<8.2f}  {:<5}   {:<5}   {:<5}".format("C", media_c, min_c, max_c, count_c))
 
 
-#PUNTI TOTALI SQUADRA 1
+# Somma delle forze inserite nella lista forze[] - Squadra 1
 somma = 0
 for elem in forze:
   somma += elem
 
-squadra2 = "Squadra 4ASA"
+# Seconda squadra inserita dal sistema - pre-definita.
+
+squadra2 = "Squadra The Best"
 
 nomi1 = ["Giovanni", "Carlos", "Albert", "Christian", "Thomas", "Saburri"]
 ruoli1 = ["p", "d", "a", "c", "d", "a"]
 forze1 = [45, 83, 73, 54, 34, 98]
 
-#PUNTI TOTALI SQUADRA 2
+# Somma delle forze inserite nella lista forze1[] - Squadra 2
 somma2 = 0
 for elem in forze1:
   somma2 += elem
 
+# Stampa quale squadra è la piu forte in base alla somma delle forze dei giocatori
 
 if somma > somma2:
   print(f"\nLa squadra {squadra} è più forte della squadra {squadra2}, con un punteggio di: {somma} a {somma2}".format(squadra, squadra2, somma, somma2))
